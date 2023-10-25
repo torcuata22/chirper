@@ -5,5 +5,10 @@
 {% block content %}
 
 <h1>Chirps!</h1>
+{% for chirp in chirps %}
+<div class="alert alert-light" role="alert">
+    <p><strong>{{chirp.user.username}}</strong>: {{chirp.body}} -- <small>{{chirp.created_at}}</small></p>
+  </div>
+{% endfor %}
 
 {% endblock %}
