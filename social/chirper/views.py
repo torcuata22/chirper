@@ -1,12 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Profile, Chirp
+from .forms import ChirpForm
 
 # Create your views here.
 def home(request):
     if request.user.is_authenticated:
+        form = ChirpForm(request.POST or None)
+        if request.method == 'POST':
+
+            if form.is_valid():
+                chirp = form.save(commit=False)
+                chirp.user = request.user
+                chirp.save()
+                messages.success(request, ("Your chirp has been heard!"))
+                return redirect('home')
+
         chirps = Chirp.objects.all().order_by("-created_at")
-    return render(request, 'chirper/home.html', {'chirps':chirps})
+        return render(request, 'chirper/home.html', {'chirps':chirps, 'form':form})
+    else:
+        chirps = Chirp.objects.all().order_by("-created_at")
+        return render(request, 'chirper/home.html', {'chirps':chirps})
 
 def profile_list(request):
     if request.user.is_authenticated:
