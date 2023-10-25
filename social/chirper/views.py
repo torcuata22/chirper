@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from .models import Profile, Chirp
 from .forms import ChirpForm
 
@@ -21,6 +22,8 @@ def home(request):
     else:
         chirps = Chirp.objects.all().order_by("-created_at")
         return render(request, 'chirper/home.html', {'chirps':chirps})
+    
+
 
 def profile_list(request):
     if request.user.is_authenticated:
@@ -30,6 +33,7 @@ def profile_list(request):
     else:
         messages.success(request, ("You must be logged in to view this page"))
         return redirect ('home')
+
 
 
 def profile(request, pk):
@@ -51,9 +55,29 @@ def profile(request, pk):
         messages.success(request, ("You must be logged in to view this page"))
         return redirect ('home')
 
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username'] #to grab data from the form: request.POST['form name']
+        password = request.POST['password']
+        user = authenticate(request, username = username, password=password) #calls djangon authentication system
+        if user is not None:
+            login(request, user)
+            messages.success(request, ("Login successful!"))
+            return redirect('home')
+        else:
+            messages.success(request, ("Oops, something went wrong. Please try again"))
+            return redirect('login')
+
+
+    else:    
+        return render(request, 'chirper/login.html', {})
 
 
 
+def logout_user(request):
+    logout(request)
+    messages.success(request, ("You have logged out successfully"))
+    return redirect('login')
 
 
 
