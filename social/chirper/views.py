@@ -16,5 +16,21 @@ def profile_list(request):
         return redirect ('home')
 
 
+def profile(request, pk):
+    #make sure user is logged in:
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user_id=pk)
+        return render(request, 'chirper/profile.html', {'profile' : profile})
 
-#10/24 stopped here: https://www.youtube.com/watch?v=fk8seSR148E&list=PLCC34OHNcOtoQCR6K4RgBWNi3-7yGgg7b&index=5
+    else:
+        messages.success(request, ("You must be logged in to view this page"))
+        return redirect ('home')
+
+
+
+
+
+
+
+
+#10/25 stopped here:
