@@ -20,6 +20,18 @@ def profile(request, pk):
     #make sure user is logged in:
     if request.user.is_authenticated:
         profile = Profile.objects.get(user_id=pk)
+        #post form logic:
+        if request.method == 'POST':
+            #get curent user:
+            current_user_profile = request.user.profile
+            #get form data:
+            action = request.POST['follow']
+            #decide follow or unfollow:
+            if action == 'unfollow':
+                current_user_profile.follows.remove(profile)
+            else:
+                current_user_profile.follows.add(profile)
+
         return render(request, 'chirper/profile.html', {'profile' : profile})
 
     else:
