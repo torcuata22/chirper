@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+
 from .models import Profile, Chirp
-from .forms import ChirpForm
+from .forms import ChirpForm, SignUpForm
 
 # Create your views here.
 def home(request):
@@ -57,9 +60,10 @@ def profile(request, pk):
 
 def login_user(request):
     if request.method == 'POST':
-        username = request.POST['username'] #to grab data from the form: request.POST['form name']
+        username = request.POST['username'] 
         password = request.POST['password']
-        user = authenticate(request, username = username, password=password) #calls djangon authentication system
+        user = authenticate(request, username=username, password=password) #calls djangon authentication system
+     
         if user is not None:
             login(request, user)
             messages.success(request, ("Login successful!"))
@@ -79,6 +83,24 @@ def logout_user(request):
     messages.success(request, ("You have logged out successfully"))
     return redirect('login')
 
+def register_user(request):
+	form = SignUpForm()
+	if request.method == "POST":
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password1']
+			# first_name = form.cleaned_data['first_name']
+			# second_name = form.cleaned_data['second_name']
+			# email = form.cleaned_data['email']
+			# Log in user
+			user = authenticate(username=username, password=password)
+			login(request,user)
+			messages.success(request, ("You have successfully registered! Welcome!"))
+			return redirect('home')
+	
+	return render(request, "chirper/register.html", {'form':form})              
 
 
 
