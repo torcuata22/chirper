@@ -4,6 +4,24 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 
+#create chirp model:keep track of user's chirps, so we need user id as FK
+class Chirp(models.Model):
+    user = models.ForeignKey(
+        User,
+        related_name="chirps",
+        on_delete=models.DO_NOTHING
+    )
+    body = models.CharField(max_length=250)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return(
+          f'{self.user} '  
+          f'{self.created_at: &Y-%m-%d %H:%M}: '  
+          f'{self.body} '
+        )
+
+
 #Create User profile Model:
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) 
@@ -25,3 +43,5 @@ def create_profile(sender, instance, created, **kwargs):
         user_profile.save()
 
 post_save.connect(create_profile, sender=User)
+
+

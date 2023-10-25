@@ -31,6 +31,8 @@ def profile(request, pk):
                 current_user_profile.follows.remove(profile)
             else:
                 current_user_profile.follows.add(profile)
+                #save profile:
+                current_user_profile.save()
 
         return render(request, 'chirper/profile.html', {'profile' : profile})
 
