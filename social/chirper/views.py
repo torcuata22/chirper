@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -108,8 +109,8 @@ def chirp_like(request, pk):
             chirp.likes.add(request.user)
     else:
         messages.success(request, ("You must be logged in to like a Chirp"))
-        return redirect('login')
-
+    return redirect('home')
+    
 
 #AUTHENTICATION VIEWS
 

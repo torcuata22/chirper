@@ -17,7 +17,7 @@ class ChirpForm(forms.ModelForm):
     
     class Meta:
         model = Chirp
-        exclude = ("user",)
+        exclude = ("user","likes", )
 
 
 class SignUpForm(UserCreationForm):
