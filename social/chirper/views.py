@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -59,6 +59,27 @@ def profile(request, pk):
     else:
         messages.success(request, ("You must be logged in to view this page"))
         return redirect ('home')
+    
+
+@login_required
+def update_user(request):
+     if request.user.is_authenticated:
+          current_user = User.objects.get(id=request.user.id)
+          profile_user = Profile.objects.get(user__id = request.user.id)
+          #get forms:
+          user_form = UpdateUserForm(request.POST or None, request.FILES or None, instance=current_user)
+          profile_form = ProfilePicForm(request.POST or None, request.FILES or None, instance = profile_user)
+          if user_form.is_valid() and profile_form.is_valid():
+               user_form.save()
+               profile_form.save()
+               login(request, current_user)
+               messages.success(request, ("Your profile has been updated"))
+               return redirect('home')
+
+          return render(request, 'chirper/update_user.html', {'user_form':user_form, 'profile_form':profile_form})
+     else:
+          messages.success(request,("You must be signed in to see this page"))
+          return redirect('home')    
 
 def login_user(request):
     if request.method == 'POST':
@@ -78,7 +99,19 @@ def login_user(request):
     else:    
         return render(request, 'chirper/login.html', {})
 
+def chirp_like(request, pk):
+    if request.user.is_authenticated:
+        chirp = get_object_or_404(Chirp, id=pk)
+        if chirp.likes.filter(id=request.user.id):
+            chirp.likes.remove(request.user)
+        else:
+            chirp.likes.add(request.user)
+    else:
+        messages.success(request, ("You must be logged in to like a Chirp"))
+        return redirect('login')
 
+
+#AUTHENTICATION VIEWS
 
 def logout_user(request):
     logout(request)
@@ -104,25 +137,7 @@ def register_user(request):
 	
 	return render(request, "chirper/register.html", {'form':form})              
 
-@login_required
-def update_user(request):
-     if request.user.is_authenticated:
-          current_user = User.objects.get(id=request.user.id)
-          profile_user = Profile.objects.get(user__id = request.user.id)
-          #get forms:
-          user_form = UpdateUserForm(request.POST or None, request.FILES or None, instance=current_user)
-          profile_form = ProfilePicForm(request.POST or None, request.FILES or None, instance = profile_user)
-          if user_form.is_valid() and profile_form.is_valid():
-               user_form.save()
-               profile_form.save()
-               login(request, current_user)
-               messages.success(request, ("Your profile has been updated"))
-               return redirect('home')
 
-          return render(request, 'chirper/update_user.html', {'user_form':user_form, 'profile_form':profile_form})
-     else:
-          messages.success(request,("You must be signed in to see this page"))
-          return redirect('home')
         
          
 
