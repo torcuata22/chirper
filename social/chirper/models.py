@@ -25,6 +25,7 @@ class Chirp(models.Model):
 #Create User profile Model:
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) 
+    profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
     follows = models.ManyToManyField("self",
                                      related_name="followed_by",
                                      symmetrical = False,
