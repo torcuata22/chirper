@@ -1,0 +1,5 @@
+.square-image {
+    width: 200px; /* Adjust to your desired size */
+    height: 200px; /* Adjust to your desired size */
+    object-fit: cover;
+}
