@@ -109,8 +109,23 @@ def chirp_like(request, pk):
             chirp.likes.add(request.user)
     else:
         messages.success(request, ("You must be logged in to like a Chirp"))
-    return redirect('home')
     
+    return redirect (request.META.get('HTTP_REFERER'))
+
+def chirp_show(request, pk):
+    chirp = get_object_or_404(Chirp, id=pk)
+    if chirp:
+        return render(request, 'chirper/show.html', {'chirp':chirp})
+
+    else:
+        messages.success(request, ("That Chirp doesn't exist"))
+        return redirect('home')
+    
+
+
+
+#TODO: Research: How to add pop up box to add your comments and share a “chirp”    
+        
 
 #AUTHENTICATION VIEWS
 

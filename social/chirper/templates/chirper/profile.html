@@ -61,7 +61,16 @@
             <div class="container">
                 <div class="row">
                     <div class="col-11">
-                        <p><strong>{{ chirp.user.username }}</strong>: {{ chirp.body }} -- <small class="text-muted">{{ chirp.created_at }}</small></p>
+                        <p><strong>{{ chirp.user.username }}</strong>: {{ chirp.body }} -- <small class="text-muted">{{ chirp.created_at }}</small>
+                             
+                            {{ chirp.number_of_likes }} Likes 
+                            
+                            {% if user in chirp.likes.all %}
+                                <a href="{% url 'chirp_like' chirp.id %}" style="text-decoration:none;">❤️</a>
+                            {% else %}
+                                <a href="{% url 'chirp_like' chirp.id %}" style="text-decoration:none;">🤍</a>
+                            {% endif %}
+                            <a href="{% url 'chirp_show' chirp.id %}" style="text-decoration:none;">↗️</a>
                     </div>
                     <div class="col-1">
                         {% if profile.profile_image %}
