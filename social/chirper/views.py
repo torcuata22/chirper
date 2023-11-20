@@ -61,6 +61,18 @@ def profile(request, pk):
         messages.success(request, ("You must be logged in to view this page"))
         return redirect ('home')
     
+def followers(request, pk):
+    if request.user.is_authenticated:
+        if request.user.id == pk: 
+            profiles = Profile.objects.get(user=pk)
+            return render(request, 'chirper/followers.html', {"profiles":profiles})
+        else:
+            messages.success(request, ("You can only see followers in our profils page"))
+        return redirect ('home')
+    else:
+        messages.success(request, ("You must be logged in to view this page"))
+        return redirect ('home')
+    
 
 @login_required
 def update_user(request):
@@ -121,6 +133,37 @@ def chirp_show(request, pk):
         messages.success(request, ("That Chirp doesn't exist"))
         return redirect('home')
     
+def unfollow(request, pk):
+    if request.user.is_authenticated:
+        #get profile to unfollow:
+        profile = Profile.objects.get(user_id = pk)
+        #unfollow the user:
+        request.user.profile.follows.remove(profile)
+        #saved our profile:
+        request.user.profile.save()
+        messages.success(request, (f"You have successfully unfollowed {profile.user.username}"))
+        return redirect(request.META.get("HTTP_REFERER"))
+
+
+    else:
+        messages.success(request, ("You must login to view this page"))
+        return redirect('home')
+    
+def follow(request, pk):
+    if request.user.is_authenticated:
+        #get profile to unfollow:
+        profile = Profile.objects.get(user_id = pk)
+        #follow the user:
+        request.user.profile.follows.add(profile)
+        #saved our profile:
+        request.user.profile.save()
+        messages.success(request, (f"You have successfully followed {profile.user.username}"))
+        return redirect(request.META.get("HTTP_REFERER"))
+
+
+    else:
+        messages.success(request, ("You must login to view this page"))
+        return redirect('home')
 
 
 

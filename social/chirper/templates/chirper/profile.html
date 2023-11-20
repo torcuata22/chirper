@@ -46,7 +46,7 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for following in profile.follows.all %}
-                                <li class="list-group-item"><a href="{% url 'profile' following.user.id %}">@{{ following|lower }}</a></li>
+                                <li class="list-group-item"><a href="{% url 'profile' following.user.id %}">@{{ following|lower }}</a> - <a href="{% url 'unfollow' following.user.id %}" style="text-decoration:none;">🚫</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -56,10 +56,27 @@
                             Followed By
                         </div>
                         <ul class="list-group list-group-flush">
-                            {% for following in profile.followed_by.all %}
-                                <li class="list-group-item"><a href="{% url 'profile' following.user.id %}">@{{ following|lower }}</a></li>
+                            {% for following in profile.followed_by.all|slice:3 %}
+                                <li class="list-group-item"><a href="{% url 'profile' following.user.id %}">@{{ following|lower }}</a> 
+                                {% if following in profile.follows.all %}
+                                <a href="{% url 'unfollow' following.user.id %}" style="text-decoration:none;">🚫</a></li>
+                                {% else %}
+                                <a href="{% url 'follow' following.user.id %}" style="text-decoration:none;">✅</a></li>
+
+                                {% endif %}
+                                </li>
                             {% endfor %}
+                             
                         </ul>
+                        
+                        <div class="card-footer">
+                            <a href="{% url 'followers' profile.user.id%}"> See All...</a>
+                        </div>
+                        
+
+
+
+
                     </div>
                        
                     <form action="" method="POST">
@@ -110,7 +127,7 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- This closing </div> should be here -->
+        </div> 
     {% endfor %}
 {% endif %}
 {% endif %}
