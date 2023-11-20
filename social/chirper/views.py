@@ -75,7 +75,7 @@ def update_user(request):
                profile_form.save()
                login(request, current_user)
                messages.success(request, ("Your profile has been updated"))
-               return redirect('home')
+               return redirect('profile', pk=request.user.id)
 
           return render(request, 'chirper/update_user.html', {'user_form':user_form, 'profile_form':profile_form})
      else:
