@@ -49,6 +49,9 @@
                                 <li class="list-group-item"><a href="{% url 'profile' following.user.id %}">@{{ following|lower }}</a> - <a href="{% url 'unfollow' following.user.id %}" style="text-decoration:none;">🚫</a></li>
                             {% endfor %}
                         </ul>
+                        <div class="card-footer">
+                            <a class="btn btn-sm btn-outline-secondary ms-auto" href="{% url 'follows' profile.user.id%}"> See All...</a>
+                        </div>
                     </div>
 
                     <div class="card mb-3">
@@ -70,7 +73,7 @@
                         </ul>
                         
                         <div class="card-footer">
-                            <a href="{% url 'followers' profile.user.id%}"> See All...</a>
+                            <a class="btn btn-sm btn-outline-secondary ms-auto" href="{% url 'followers' profile.user.id%}"> See All...</a>
                         </div>
                         
 

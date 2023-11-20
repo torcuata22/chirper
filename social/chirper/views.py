@@ -67,7 +67,19 @@ def followers(request, pk):
             profiles = Profile.objects.get(user=pk)
             return render(request, 'chirper/followers.html', {"profiles":profiles})
         else:
-            messages.success(request, ("You can only see followers in our profils page"))
+            messages.success(request, ("You can only see followers in our profile page"))
+        return redirect ('home')
+    else:
+        messages.success(request, ("You must be logged in to view this page"))
+        return redirect ('home')
+    
+def follows(request, pk):
+    if request.user.is_authenticated:
+        if request.user.id == pk: 
+            profiles = Profile.objects.get(user=pk)
+            return render(request, 'chirper/follows.html', {"profiles":profiles})
+        else:
+            messages.success(request, ("You can only see who you follow in your profile page"))
         return redirect ('home')
     else:
         messages.success(request, ("You must be logged in to view this page"))
