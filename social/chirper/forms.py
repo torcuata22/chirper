@@ -61,6 +61,11 @@ class UpdateUserForm(forms.ModelForm):
         
 class ProfilePicForm(forms.ModelForm):
       profile_image = forms.ImageField(label='Profile Picture')
+      profile_bio = forms.CharField(label="Profile Bio", widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Profile Bio'}))
+      homepage_link = forms.CharField(label="Homepage", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Homepage'}))
+      facebook_link = forms.CharField(label="Facebook", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Facebook'}))
+      instagram_link = forms.CharField(label="Instagram", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Instagram'}))
+      linkedin_link = forms.CharField(label="LinkedIn", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'LinkedIn'}))
       class Meta:
             model = Profile 
-            fields=['profile_image', ]
+            fields=['profile_image', 'profile_bio', 'homepage_link','facebook_link', 'instagram_link', 'linkedin_link' ]

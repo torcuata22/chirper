@@ -36,6 +36,13 @@ class Profile(models.Model):
                                      symmetrical = False,
                                      blank=True) 
     date_modified = models.DateTimeField(User, auto_now=True)
+    homepage_link = models.CharField(null=True, blank=True, max_length=50)
+    profile_bio = models.CharField(null=True, blank=True, max_length=500)
+    homepage_link = models.CharField(null=True, blank=True, max_length=50)
+    facebook_link = models.CharField(null=True, blank=True, max_length=50)
+    instagram_link = models.CharField(null=True, blank=True, max_length=50)
+    linkedin_link = models.CharField(null=True, blank=True, max_length=50)
+
     def __str__(self):
         return self.user.username
 
