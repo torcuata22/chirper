@@ -1,3 +1,4 @@
+
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
@@ -106,24 +107,6 @@ def update_user(request):
           messages.success(request,("You must be signed in to see this page"))
           return redirect('home')    
 
-def login_user(request):
-    if request.method == 'POST':
-        username = request.POST['username'] 
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password) #calls djangon authentication system
-     
-        if user is not None:
-            login(request, user)
-            messages.success(request, ("Login successful!"))
-            return redirect('home')
-        else:
-            messages.success(request, ("Oops, something went wrong. Please try again"))
-            return redirect('login')
-
-
-    else:    
-        return render(request, 'chirper/login.html', {})
-
 def chirp_like(request, pk):
     if request.user.is_authenticated:
         chirp = get_object_or_404(Chirp, id=pk)
@@ -136,6 +119,7 @@ def chirp_like(request, pk):
     
     return redirect (request.META.get('HTTP_REFERER'))
 
+#CRUD
 def chirp_show(request, pk):
     chirp = get_object_or_404(Chirp, id=pk)
     if chirp:
@@ -144,7 +128,49 @@ def chirp_show(request, pk):
     else:
         messages.success(request, ("That Chirp doesn't exist"))
         return redirect('home')
-    
+
+
+def delete_chirp(request, pk):
+    if request.user.is_authenticated:
+        chirp = get_object_or_404(Chirp, id=pk)
+        if request.user.username == chirp.user.username:
+            #delete the chirp:
+            chirp.delete()
+            messages.success(request, ("Your chirp has been deleted"))
+            return redirect (request.META.get('HTTP_REFERER')) 
+        else:
+            messages.success(request, ("Oi! That is not your chirp!"))
+            return redirect ('home')
+
+    else:
+        messages.success(request, ("Please log in to continue"))
+        return redirect (request.META.get('HTTP_REFERER'))
+
+def edit_chirp(request, pk):
+    chirp = get_object_or_404(Chirp, id=pk)
+    if request.user.is_authenticated:
+        if request.user.username == chirp.user.username:
+            form = ChirpForm(request.POST or None, instance=chirp)
+            if request.method == 'POST':
+                if form.is_valid():
+                    chirp = form.save(commit=False)
+                    chirp.user = request.user
+                    chirp.save()
+                    messages.success(request, ("Your chirp has been updated!"))
+                    return redirect('home')
+                return render(request, 'chirper/edit_chirp.html', {'form':form, 'chirp':chirp})
+            
+            else:
+                return render(request, 'chirper/edit_chirp.html', {'form':form, 'chirp':chirp})
+   
+        else:
+            messages.success(request, ("Oi! That is not your chirp!"))
+            return redirect ('home')
+    else:
+        messages.success(request, ("Please log in to continue"))
+        return redirect ('home')
+
+
 def unfollow(request, pk):
     if request.user.is_authenticated:
         #get profile to unfollow:
@@ -177,12 +203,32 @@ def follow(request, pk):
         messages.success(request, ("You must login to view this page"))
         return redirect('home')
 
+def search(request):
+    return render(request, 'chirper/search.html')
 
 
 #TODO: Research: How to add pop up box to add your comments and share a “chirp”    
         
 
 #AUTHENTICATION VIEWS
+    
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username'] 
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password) #calls djangon authentication system
+     
+        if user is not None:
+            login(request, user)
+            messages.success(request, ("Login successful!"))
+            return redirect('home')
+        else:
+            messages.success(request, ("Oops, something went wrong. Please try again"))
+            return redirect('login')
+
+
+    else:    
+        return render(request, 'chirper/login.html', {})
 
 def logout_user(request):
     logout(request)
@@ -207,6 +253,7 @@ def register_user(request):
 			return redirect('home')
 	
 	return render(request, "chirper/register.html", {'form':form})              
+
 
 
         

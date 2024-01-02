@@ -119,13 +119,20 @@
                             {% else %}
                                 <a href="{% url 'chirp_like' chirp.id %}" style="text-decoration:none;">🤍</a>
                             {% endif %}
-                            <a href="{% url 'chirp_show' chirp.id %}" style="text-decoration:none;">↗️</a>
+                            <a href="{% url 'chirp_show' chirp.id %}" style="text-decoration:none;"><img src="{% static 'images/open_new.png' %}" width="25" height="25" alt="open in new page"></a>
+                            
+                            {% if request.user.username == profile.user.username %}
+                            <a href="{% url 'delete_chirp' chirp.id %}" style="text-decoration:none;"><img src="{% static 'images/delete_icon.png' %}" width="25" height="25" alt="delete icon"></a>
+                            <a href="{% url 'edit_chirp' chirp.id %}" style="text-decoration:none;"><img src="{% static 'images/edit_icon.png' %}" width="25" height="25" alt="delete icon"></a>
+                            
+                            {% endif %}
+
                     </div>
                     <div class="col-1">
                         {% if profile.profile_image %}
                             <img src="{{ profile.profile_image.url }}" width="55" height="55" class="rounded-circle" alt="{{ profile.profile_image }}">
                         {% else %}
-                            <img src="{% static 'images/default_user.png' %}" width="55" height="55" class="rounded-circle" alt="default profile avatar">
+                            <img src="{% static 'images/user.png' %}" width="55" height="55" class="rounded-circle" alt="default profile avatar">
                         {% endif %}
                     </div>
                 </div>

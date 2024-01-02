@@ -1,0 +1,23 @@
+{% extends './base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+    <h1 class="text-center">Search Chirps</h1>
+            
+
+
+        <div class="col-4 text-center">
+            <br><br>
+                <form method="POST">
+                    {% csrf_token %}
+                  
+                        <button type="submit" class="btn btn-success">Search Chirps</button>
+                </form>
+         
+        </div>
+
+{% endblock %}
+

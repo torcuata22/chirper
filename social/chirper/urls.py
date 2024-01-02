@@ -16,6 +16,9 @@ urlpatterns = [
    path('chirp_show/<int:pk>', views.chirp_show, name='chirp_show'),
    path('unfollow/<int:pk>', views.unfollow, name='unfollow'),
    path('follow/<int:pk>', views.follow, name='follow'),
+   path('delete_chirp/<int:pk>', views.delete_chirp, name='delete_chirp'),
+   path('edit_chirp/<int:pk>', views.edit_chirp, name='edit_chirp'),
+   path('search/', views.search, name='search'),
    
 
 ]
