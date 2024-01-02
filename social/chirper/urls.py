@@ -19,6 +19,8 @@ urlpatterns = [
    path('delete_chirp/<int:pk>', views.delete_chirp, name='delete_chirp'),
    path('edit_chirp/<int:pk>', views.edit_chirp, name='edit_chirp'),
    path('search/', views.search, name='search'),
+   path('search_user/', views.search_user, name='search_user'),
+
    
 
 ]

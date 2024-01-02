@@ -1,0 +1,24 @@
+{% extends './base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+    <h1 class="text-center">Search Users</h1>
+            
+   
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="input" class="form-control" placeholder="Search Chirps" name="search">
+                  
+                    <button type="submit" class="btn btn-success mt-3 mb-4">Search Users</button>
+                </form>
+                {% if search %}
+
+                <h3>You Searched for: {{search}}</h3>
+       
+                {% endif %}
+
+{% endblock %}
+
