@@ -26,7 +26,6 @@ class Chirp(models.Model):
           f'{self.body} '
         )
 
-
 #Create User profile Model:
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) 

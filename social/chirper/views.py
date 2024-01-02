@@ -219,7 +219,7 @@ def search_user(request):
         #grab form field input:
         search = request.POST['search']
         #search database (all chirp bodies nad find chirps that contain the word):
-        searched = Chirp.objects.filter(body__contains = search)
+        searched = User.objects.filter(username__contains = search)
         return render(request, 'chirper/search_user.html', {'search':search, 'searched':searched})
 
     else:
