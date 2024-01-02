@@ -30,6 +30,10 @@
               <a class="nav-link" href="{% url 'register' %}">Register</a>
             </li>
           {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}">Search Chirps</a>
+          </li>
+
         </ul>
         {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
@@ -41,8 +45,6 @@
                   <img src="{% static 'images/user.png' %}" class="rounded-circle" width="55" height="55" style="background-color: #ffffff;" alt="default profile avatar">
                 {% endif %}
               </a>
-              
-             
             </li>
           </ul>
         {% endif %}

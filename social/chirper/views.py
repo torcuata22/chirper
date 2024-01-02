@@ -204,7 +204,15 @@ def follow(request, pk):
         return redirect('home')
 
 def search(request):
-    return render(request, 'chirper/search.html')
+    if request.method == "POST":
+        #grab form field input:
+        search = request.POST['search']
+        #search database (all chirp bodies nad find chirps that contain the word):
+        searched = Chirp.objects.filter(body__contains = search)
+        return render(request, 'chirper/search.html', {'search':search, 'searched':searched})
+
+    else:
+        return render(request, 'chirper/search.html', {})
 
 
 #TODO: Research: How to add pop up box to add your comments and share a “chirp”    
