@@ -30,7 +30,7 @@ To get started with Chirper, follow these simple steps:
 
 1. **Clone the Repository**: Clone the Chirper repository to your local machine using the following command:
 
-   git clone [repository_url]
+   git clone https://github.com/torcuata22/chirper
   
 2. **Install Dependencies**: Navigate to the project directory and install the required dependencies by running:
 
